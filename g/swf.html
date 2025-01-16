@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Run SWF</title>
+    <!-- Include Ruffle library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.9.13/ruffle.js" integrity="sha512-9QxryYNq2TSTfsg9XWd3e2mgdWUFfqcZF8gxYBs2/jzIvymlZF9+fwYwVLsLNS01ekviTlxwIkQoMeNVqBWL9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>Upload and Run SWF</h1>
+    <input type="file" id="swfFileInput" accept=".swf">
+    <div id="swfContainer"></div>
+    <script>
+        const fileInput = document.getElementById('swfFileInput');
+        const swfContainer = document.getElementById('swfContainer');
+
+        fileInput.addEventListener('change', event => {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.swf')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    const rufflePlayer = document.createElement('ruffle-player');
+                    rufflePlayer.style.width = '800px'; // Adjust the size as needed
+                    rufflePlayer.style.height = '600px';
+                    rufflePlayer.load(arrayBuffer);
+                    swfContainer.innerHTML = ''; // Clear any previous content
+                    swfContainer.appendChild(rufflePlayer);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                alert('Please upload a valid SWF file.');
+            }
+        });
+    </script>
+</body>
+</html>
